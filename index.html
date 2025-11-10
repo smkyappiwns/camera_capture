@@ -74,7 +74,7 @@
       const base64Data = canvas.toDataURL('image/jpeg');
       statusText.textContent = "Sending to n8n...";
 
-      const n8nWebhookUrl = "https://n8n.smkyappi-wns.sch.id/webhook/face-capture";
+      const n8nWebhookUrl = "https://n8n.smkyappi-wns.sch.id/webhook-test/face-capture";
 
       try {
         const res = await fetch(n8nWebhookUrl, {
