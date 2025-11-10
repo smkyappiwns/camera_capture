@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Face Capture to n8n</title>
+  <title>Test Kamera HP</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -37,11 +37,11 @@
   </style>
 </head>
 <body>
-  <h2>📷 Capture Face & Send to n8n</h2>
+  <h2>📷 Ambil Foto dan Kirim ke n8n</h2>
 
   <video id="video" autoplay playsinline></video>
   <br />
-  <button id="captureBtn">📸 Capture & Send</button>
+  <button id="captureBtn">📸 Ambil & Kirim</button>
 
   <canvas id="canvas"></canvas>
 
@@ -74,7 +74,6 @@
       const base64Data = canvas.toDataURL('image/jpeg');
       statusText.textContent = "Sending to n8n...";
 
-      // 🧭 Ganti URL berikut dengan URL Webhook n8n kamu
       const n8nWebhookUrl = "https://n8n.smkyappi-wns.sch.id/webhook-test/face-capture";
 
       try {
@@ -85,10 +84,10 @@
         });
 
         const result = await res.json();
-        statusText.textContent = "✅ Sent successfully! Response: " + JSON.stringify(result);
+        statusText.textContent = "✅ Terkirim! Response: " + JSON.stringify(result);
       } catch (e) {
         console.error(e);
-        statusText.textContent = "❌ Failed to send to n8n.";
+        statusText.textContent = "❌ Gagal mengirim ke to n8n.";
       }
     }
 
