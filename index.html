@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Test Kamera + Login</title>
+  <title>Presensi</title>
 
   <style>
     body {
@@ -59,13 +59,16 @@
 
 <body>
 
-  <h2>📷 Capture + Kirim ke n8n</h2>
+  <h2>Presensi</h2>
 
   <!-- FORM LOGIN -->
-  <div>
-    <input type="text" id="username" placeholder="Username" />
-    <br />
-    <input type="password" id="password" placeholder="Password" />
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" class="form-control" id="username" name="username" placeholder="Masukkan username">
+                    </div>
+                    <div class="form-group">
+                        <label for="InputPassword">Password</label>
+                        <input type="password" class="form-control" id="InputPassword" name="password" placeholder="Password">
   </div>
 
   <!-- VIDEO -->
@@ -73,7 +76,7 @@
   <br />
 
   <!-- BUTTON -->
-  <button id="captureBtn">📸 Ambil & Kirim</button>
+  <button id="captureBtn">Submit Presensi</button>
 
   <!-- CANVAS -->
   <canvas id="canvas"></canvas>
@@ -137,12 +140,12 @@
 
         const result = await res.json();
 
-        statusText.textContent = "✅ Berhasil dikirim!";
+        statusText.textContent = "✅ Presensi Berhasil!";
         console.log("Response:", result);
 
       } catch (e) {
         console.error(e);
-        statusText.textContent = "❌ Gagal mengirim ke n8n";
+        statusText.textContent = "❌ Gagal Presensi";
       }
     }
 
