@@ -6,82 +6,122 @@
   <title>Presensi</title>
 
   <style>
+    * {
+      box-sizing: border-box;
+      font-family: "Segoe UI", sans-serif;
+    }
+
     body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      background: #f5f5f5;
       margin: 0;
-      padding: 2rem;
+      height: 100vh;
+      background: linear-gradient(135deg, #4facfe, #00f2fe);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .container {
+      background: #fff;
+      padding: 30px;
+      border-radius: 16px;
+      width: 350px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      text-align: center;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    .form-group {
+      text-align: left;
+      margin-bottom: 15px;
+    }
+
+    label {
+      font-size: 13px;
+      color: #555;
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+      font-size: 14px;
+      transition: 0.3s;
+    }
+
+    input:focus {
+      border-color: #4facfe;
+      outline: none;
+      box-shadow: 0 0 5px rgba(79,172,254,0.5);
     }
 
     video {
-      width: 320px;
-      height: 240px;
-      border: 2px solid #444;
+      width: 100%;
       border-radius: 10px;
       margin-top: 10px;
     }
 
-    canvas {
-      display: none;
-    }
-
-    input {
-      padding: 10px;
-      width: 250px;
-      margin: 5px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-      font-size: 14px;
-    }
-
     button {
-      background: #2196f3;
+      width: 100%;
+      background: #4facfe;
       color: white;
       border: none;
-      padding: 10px 20px;
-      border-radius: 6px;
-      font-size: 16px;
+      padding: 12px;
+      border-radius: 10px;
+      font-size: 15px;
       cursor: pointer;
-      margin-top: 10px;
+      margin-top: 15px;
+      transition: 0.3s;
     }
 
     button:hover {
-      background: #0b7dda;
+      background: #2f80ed;
     }
 
     #status {
-      margin-top: 15px;
-      font-size: 14px;
+      margin-top: 10px;
+      font-size: 13px;
+      color: #444;
+    }
+
+    .logo {
+      font-size: 22px;
+      font-weight: bold;
+      color: #4facfe;
+      margin-bottom: 10px;
     }
   </style>
 </head>
 
 <body>
 
-  <h2>Presensi</h2>
+  <div class="container">
+    <div class="logo">Presensi</div>
+    <h2>Login & Capture</h2>
 
-  <!-- FORM LOGIN -->
-                    <div class="form-group">
-                        <label for="username">Username</label>
-                        <input type="text" class="form-control" id="username" name="username" placeholder="Masukkan username">
-                    </div>
-                    <div class="form-group">
-                        <label for="InputPassword">Password</label>
-                        <input type="password" class="form-control" id="InputPassword" name="password" placeholder="Password">
+    <div class="form-group">
+      <label>Username</label>
+      <input type="text" id="username" placeholder="Masukkan username">
+    </div>
+
+    <div class="form-group">
+      <label>Password</label>
+      <input type="password" id="password" placeholder="Masukkan password">
+    </div>
+
+    <video id="video" autoplay playsinline></video>
+
+    <button id="captureBtn">Submit Presensi</button>
+
+    <canvas id="canvas"></canvas>
+    <p id="status"></p>
   </div>
-
-  <!-- VIDEO -->
-  <video id="video" autoplay playsinline></video>
-  <br />
-
-  <!-- BUTTON -->
-  <button id="captureBtn">Submit Presensi</button>
-
-  <!-- CANVAS -->
-  <canvas id="canvas"></canvas>
-
-  <p id="status"></p>
 
   <script>
     const video = document.getElementById('video');
@@ -91,7 +131,6 @@
     const usernameInput = document.getElementById('username');
     const passwordInput = document.getElementById('password');
 
-    // 🔹 Inisialisasi kamera
     async function initCamera() {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({ video: true });
@@ -103,7 +142,6 @@
       }
     }
 
-    // 🔹 Capture + kirim
     async function captureAndSend() {
       const username = usernameInput.value;
       const password = passwordInput.value;
@@ -119,15 +157,12 @@
       context.drawImage(video, 0, 0, canvas.width, canvas.height);
 
       const base64Data = canvas.toDataURL('image/jpeg');
-
       const timestamp = new Date().toISOString();
 
-      statusText.textContent = "Sending to n8n...";
-
-      const n8nWebhookUrl = "https://n8n.smkyappi-wns.sch.id/webhook-test/face-capture";
+      statusText.textContent = "Sending...";
 
       try {
-        const res = await fetch(n8nWebhookUrl, {
+        const res = await fetch("https://n8n.smkyappi-wns.sch.id/webhook-test/face-capture", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -141,7 +176,7 @@
         const result = await res.json();
 
         statusText.textContent = "✅ Presensi Berhasil!";
-        console.log("Response:", result);
+        console.log(result);
 
       } catch (e) {
         console.error(e);
@@ -151,7 +186,6 @@
 
     document.getElementById('captureBtn').addEventListener('click', captureAndSend);
 
-    // jalankan kamera
     initCamera();
   </script>
 
