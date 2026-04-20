@@ -1,49 +1,77 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Presensi</title>
+
+  <!-- FONT -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
     * {
       box-sizing: border-box;
-      font-family: "Segoe UI", sans-serif;
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0;
     }
 
     body {
-      margin: 0;
-      height: 100vh;
-      background: linear-gradient(135deg, #4facfe, #00f2fe);
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      background: #f8f9fa;
     }
 
-    .container {
-      background: #fff;
-      padding: 30px;
-      border-radius: 16px;
-      width: 350px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-      text-align: center;
+    .login-container {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .login-wrapper {
+      display: flex;
+      width: 100%;
+      max-width: 1100px;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+    }
+
+    /* LEFT FORM */
+    .form-section {
+      flex: 1;
+      background: white;
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .logo {
+      height: 70px;
+      margin-bottom: 15px;
     }
 
     h2 {
+      color: #004b4c;
+      margin-bottom: 5px;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      color: #777;
       margin-bottom: 20px;
-      color: #333;
     }
 
     .form-group {
-      text-align: left;
       margin-bottom: 15px;
     }
 
     label {
       font-size: 13px;
       color: #555;
-      display: block;
       margin-bottom: 5px;
+      display: block;
     }
 
     input {
@@ -52,13 +80,12 @@
       border-radius: 8px;
       border: 1px solid #ddd;
       font-size: 14px;
-      transition: 0.3s;
     }
 
     input:focus {
-      border-color: #4facfe;
+      border-color: #004b4c;
       outline: none;
-      box-shadow: 0 0 5px rgba(79,172,254,0.5);
+      box-shadow: 0 0 4px rgba(0,75,76,0.3);
     }
 
     video {
@@ -69,126 +96,164 @@
 
     button {
       width: 100%;
-      background: #4facfe;
+      padding: 12px;
+      background: #004b4c;
       color: white;
       border: none;
-      padding: 12px;
-      border-radius: 10px;
-      font-size: 15px;
-      cursor: pointer;
+      border-radius: 8px;
+      font-weight: 600;
       margin-top: 15px;
-      transition: 0.3s;
+      cursor: pointer;
     }
 
     button:hover {
-      background: #2f80ed;
+      background: #006e70;
     }
 
     #status {
       margin-top: 10px;
       font-size: 13px;
-      color: #444;
     }
 
-    .logo {
-      font-size: 22px;
-      font-weight: bold;
-      color: #4facfe;
+    /* RIGHT SIDE */
+    .illustration-section {
+      flex: 1;
+      background: linear-gradient(135deg, #004b4c, #0e8549);
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 40px;
+    }
+
+    .illustration-section img {
+      max-width: 100%;
+      border-radius: 10px;
+    }
+
+    .illustration-section h3 {
       margin-bottom: 10px;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      .login-wrapper {
+        flex-direction: column;
+      }
+
+      .illustration-section {
+        display: none;
+      }
     }
   </style>
 </head>
 
 <body>
 
-  <div class="container">
-    <div class="logo">Presensi</div>
-    <h2>Login & Capture</h2>
+<div class="login-container">
+  <div class="login-wrapper">
 
-    <div class="form-group">
-      <label>Username</label>
-      <input type="text" id="username" placeholder="Masukkan username">
+    <!-- FORM -->
+    <div class="form-section">
+
+      <img src="https://nuist.id/images/logo1.png" class="logo">
+
+      <h2>Presensi</h2>
+      <div class="subtitle">Silakan login dan ambil foto</div>
+
+      <div class="form-group">
+        <label>Username</label>
+        <input type="text" id="username">
+      </div>
+
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="password">
+      </div>
+
+      <video id="video" autoplay playsinline></video>
+
+      <button id="captureBtn">Submit Presensi</button>
+
+      <canvas id="canvas"></canvas>
+      <p id="status"></p>
     </div>
 
-    <div class="form-group">
-      <label>Password</label>
-      <input type="password" id="password" placeholder="Masukkan password">
+    <!-- RIGHT -->
+    <div class="illustration-section">
+      <div>
+        <h3>Selamat Datang</h3>
+        <p>Sistem Presensi Digital</p>
+        <img src="https://nuist.id/images/verification-img.png">
+      </div>
     </div>
 
-    <video id="video" autoplay playsinline></video>
-
-    <button id="captureBtn">Submit Presensi</button>
-
-    <canvas id="canvas"></canvas>
-    <p id="status"></p>
   </div>
+</div>
 
-  <script>
-    const video = document.getElementById('video');
-    const canvas = document.getElementById('canvas');
-    const statusText = document.getElementById('status');
+<script>
+const video = document.getElementById('video');
+const canvas = document.getElementById('canvas');
+const statusText = document.getElementById('status');
 
-    const usernameInput = document.getElementById('username');
-    const passwordInput = document.getElementById('password');
+const usernameInput = document.getElementById('username');
+const passwordInput = document.getElementById('password');
 
-    async function initCamera() {
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-        video.srcObject = stream;
-        statusText.textContent = "Camera active ✅";
-      } catch (err) {
-        console.error(err);
-        statusText.textContent = "Camera access denied ❌";
-      }
-    }
+async function initCamera() {
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+    video.srcObject = stream;
+    statusText.textContent = "Camera active ✅";
+  } catch (err) {
+    statusText.textContent = "Camera access denied ❌";
+  }
+}
 
-    async function captureAndSend() {
-      const username = usernameInput.value;
-      const password = passwordInput.value;
+async function captureAndSend() {
+  const username = usernameInput.value;
+  const password = passwordInput.value;
 
-      if (!username || !password) {
-        statusText.textContent = "⚠️ Username & password wajib diisi!";
-        return;
-      }
+  if (!username || !password) {
+    statusText.textContent = "⚠️ Username & password wajib diisi!";
+    return;
+  }
 
-      const context = canvas.getContext('2d');
-      canvas.width = video.videoWidth;
-      canvas.height = video.videoHeight;
-      context.drawImage(video, 0, 0, canvas.width, canvas.height);
+  const ctx = canvas.getContext('2d');
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
+  ctx.drawImage(video, 0, 0);
 
-      const base64Data = canvas.toDataURL('image/jpeg');
-      const timestamp = new Date().toISOString();
-      const userAgent = navigator.userAgent;
-      statusText.textContent = "Sending...";
+  const base64Data = canvas.toDataURL('image/jpeg');
+  const timestamp = new Date().toISOString();
+  const userAgent = navigator.userAgent;
 
-      try {
-        const res = await fetch("https://n8n.smkyappi-wns.sch.id/webhook-test/face-capture", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            image: base64Data,
-            username: username,
-            password: password,
-            timestamp: timestamp,
-            user_agent: userAgent
-          }),
-        });
+  statusText.textContent = "Sending...";
 
-        const result = await res.json();
+  try {
+    const res = await fetch("https://n8n.smkyappi-wns.sch.id/webhook-test/face-capture", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        image: base64Data,
+        username,
+        password,
+        timestamp,
+        user_agent: userAgent
+      }),
+    });
 
-        statusText.textContent = "✅ Presensi Berhasil!";
-        console.log(result);
+    await res.json();
+    statusText.textContent = "✅ Presensi Berhasil!";
+  } catch (e) {
+    statusText.textContent = "❌ Gagal Presensi";
+  }
+}
 
-      } catch (e) {
-        console.error(e);
-        statusText.textContent = "❌ Gagal Presensi";
-      }
-    }
+document.getElementById('captureBtn').addEventListener('click', captureAndSend);
 
-    document.getElementById('captureBtn').addEventListener('click', captureAndSend);
-
-    initCamera();
-  </script>
+initCamera();
+</script>
 
 </body>
 </html>
