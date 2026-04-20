@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Test Kamera HP</title>
+  <title>Test Kamera + Login</title>
+
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -12,15 +13,28 @@
       margin: 0;
       padding: 2rem;
     }
+
     video {
       width: 320px;
       height: 240px;
       border: 2px solid #444;
       border-radius: 10px;
+      margin-top: 10px;
     }
+
     canvas {
       display: none;
     }
+
+    input {
+      padding: 10px;
+      width: 250px;
+      margin: 5px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+    }
+
     button {
       background: #2196f3;
       color: white;
@@ -31,18 +45,37 @@
       cursor: pointer;
       margin-top: 10px;
     }
+
     button:hover {
       background: #0b7dda;
     }
+
+    #status {
+      margin-top: 15px;
+      font-size: 14px;
+    }
   </style>
 </head>
-<body>
-  <h2>📷 Ambil Foto dan Kirim ke n8n</h2>
 
+<body>
+
+  <h2>📷 Capture + Kirim ke n8n</h2>
+
+  <!-- FORM LOGIN -->
+  <div>
+    <input type="text" id="username" placeholder="Username" />
+    <br />
+    <input type="password" id="password" placeholder="Password" />
+  </div>
+
+  <!-- VIDEO -->
   <video id="video" autoplay playsinline></video>
   <br />
+
+  <!-- BUTTON -->
   <button id="captureBtn">📸 Ambil & Kirim</button>
 
+  <!-- CANVAS -->
   <canvas id="canvas"></canvas>
 
   <p id="status"></p>
@@ -52,7 +85,10 @@
     const canvas = document.getElementById('canvas');
     const statusText = document.getElementById('status');
 
-    // ✅ Minta izin kamera
+    const usernameInput = document.getElementById('username');
+    const passwordInput = document.getElementById('password');
+
+    // 🔹 Inisialisasi kamera
     async function initCamera() {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({ video: true });
@@ -64,14 +100,25 @@
       }
     }
 
-    // 📸 Ambil snapshot dan kirim ke n8n
+    // 🔹 Capture + kirim
     async function captureAndSend() {
+      const username = usernameInput.value;
+      const password = passwordInput.value;
+
+      if (!username || !password) {
+        statusText.textContent = "⚠️ Username & password wajib diisi!";
+        return;
+      }
+
       const context = canvas.getContext('2d');
       canvas.width = video.videoWidth;
       canvas.height = video.videoHeight;
       context.drawImage(video, 0, 0, canvas.width, canvas.height);
 
       const base64Data = canvas.toDataURL('image/jpeg');
+
+      const timestamp = new Date().toISOString();
+
       statusText.textContent = "Sending to n8n...";
 
       const n8nWebhookUrl = "https://n8n.smkyappi-wns.sch.id/webhook-test/face-capture";
@@ -80,19 +127,30 @@
         const res = await fetch(n8nWebhookUrl, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ image: base64Data }),
+          body: JSON.stringify({
+            image: base64Data,
+            username: username,
+            password: password,
+            timestamp: timestamp
+          }),
         });
 
         const result = await res.json();
-        statusText.textContent = "✅ Terkirim! Response: " + JSON.stringify(result);
+
+        statusText.textContent = "✅ Berhasil dikirim!";
+        console.log("Response:", result);
+
       } catch (e) {
         console.error(e);
-        statusText.textContent = "❌ Gagal mengirim ke to n8n.";
+        statusText.textContent = "❌ Gagal mengirim ke n8n";
       }
     }
 
     document.getElementById('captureBtn').addEventListener('click', captureAndSend);
+
+    // jalankan kamera
     initCamera();
   </script>
+
 </body>
 </html>
